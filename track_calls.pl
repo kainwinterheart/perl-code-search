@@ -73,12 +73,12 @@ while( defined( my $sub_name = shift( @sub_names ) ) ) {
 
                     unless( exists( $output{ $parent_name } ) ) {
 
-                        $output{ $parent_name } = $local_output -> { $parent_name } = {};
-
                         push( @sub_names, $parent_name );
                     }
 
-                    push( @{ $files{ $parent_name } }, $file );
+                    $output{ $parent_name } = $local_output -> { $parent_name } //= {};
+
+                    push( @{ $files{ '' . $local_output -> { $parent_name } } }, $file );
 
                     last;
                 }
@@ -103,7 +103,7 @@ if( $include_files_info ) {
         while( my ( $name, $list ) = each( %$node ) ) {
 
             %$list = (
-                files => $files{ $name },
+                files => $files{ '' . $list },
                 calls => { %$list },
             );
 
